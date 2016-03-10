@@ -4,11 +4,12 @@ from src.utils.utils import *
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
-#
+
+
 pd.set_option('expand_frame_repr', False)
 dtypes = {"name": str, "review": str, "rating": int}
 products = pd.read_csv('data/amazon_baby.csv', dtype=dtypes, sep=',', quotechar='"')
-#
+
 
 def remove_punctuation(text):
     from string import punctuation
@@ -16,34 +17,40 @@ def remove_punctuation(text):
         return ''
     return re.sub('[{}]'.format(punctuation), '', text)
 
-products['review_clean'] = products['review'].apply(remove_punctuation)
-products = products[products['rating'] != 3]
-products['sentiment'] = products['rating'].apply(lambda rating: 1 if rating > 3 else -1)
-#
-train_data_indexes = load_json_list("data/module-2-assignment-train-idx.json")
-train_data = products.iloc[train_data_indexes]
-#
-test_data_indexes = load_json_list("data/module-2-assignment-test-idx.json")
-test_data = products.iloc[train_data_indexes]
-#
-# print(train_data)
-#
-#
+
+def transform_data(prod):
+    prod['review_clean'] = prod['review'].apply(remove_punctuation)
+    prod = prod[prod['rating'] != 3]
+    prod['sentiment'] = prod['rating'].apply(lambda rating: 1 if rating > 3 else -1)
+    return prod
+
+
+def load_train_test_sets(prod):
+    train_data_indexes = load_json_list("data/module-2-assignment-train-idx.json")
+    train_data = products.iloc[train_data_indexes]
+    test_data_indexes = load_json_list("data/module-2-assignment-test-idx.json")
+    test_data = products.iloc[train_data_indexes]
+    return train_data, test_data
+
+
+def calc_coefs_fraction(model):
+    coefs = sentiment_model.coef_
+    positive = len([c for c in coefs[0] if c >= 0])
+    negative = len([c for c in coefs[0] if c < 0])
+    print("positive coefs: {}, negative coefs: {}".format(positive, negative))
+    return positive, negative
+
+products = transform_data(products)
+train_data, test_data = load_train_test_sets(products)
+
 vectorizer = CountVectorizer(token_pattern=r'\b\w+\b')
 train_matrix = vectorizer.fit_transform(train_data['review_clean'])
-print(train_matrix)
-print(train_matrix.shape)
 
 sentiment_model = LogisticRegression()
 sentiment_model.fit(train_matrix, train_data['sentiment'])
 
-coefs = sentiment_model.coef_
-print(coefs.shape)
-positive = len([c for c in coefs[0] if c >= 0])
-negative = len([c for c in coefs[0] if c < 0])
+calc_coefs_fraction(sentiment_model)
 
-print("positive coefs: {}, negative coefs: {}".format(positive, negative))
-#
 sample_test_data = test_data[10:13]
 
 # from sklearn.externals import joblib
