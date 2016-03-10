@@ -68,3 +68,9 @@ print(sample_test_data)
 sample_test_matrix = vectorizer.transform(sample_test_data['review_clean'])
 scores = sentiment_model.decision_function(sample_test_matrix)
 print(scores)
+
+test_matrix = vectorizer.transform(test_data['review_clean'])
+labels = test_data['rating']
+
+prediction = sentiment_model.predict(test_matrix)
+print(prediction)
