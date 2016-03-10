@@ -29,7 +29,7 @@ def load_train_test_sets(prod):
     train_data_indexes = load_json_list("data/module-2-assignment-train-idx.json")
     train_data = products.iloc[train_data_indexes]
     test_data_indexes = load_json_list("data/module-2-assignment-test-idx.json")
-    test_data = products.iloc[train_data_indexes]
+    test_data = products.iloc[test_data_indexes]
     return train_data, test_data
 
 
