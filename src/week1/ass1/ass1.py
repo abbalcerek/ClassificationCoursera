@@ -74,7 +74,7 @@ def sample_data(test_data):
 def best_reviews(test_data, test_matrix, n=20, reverse=False):
     score = sentiment_model.decision_function(test_matrix)
     indexed_score = zip(score, range(len(score)))
-    indexes = [index for (value, index) in sorted(indexed_score, reverse=not reverse)[:20]]
+    indexes = [index for (value, index) in sorted(indexed_score, reverse=not reverse)[:n]]
     reves = test_data[['name', 'review']].iloc[indexes]
     for rev in reves.iterrows():
         print(rev[1]['name'], '\n')
