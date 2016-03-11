@@ -4,6 +4,7 @@ from src.utils.utils import *
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.externals import joblib
 
 
 pd.set_option('expand_frame_repr', False)
@@ -43,21 +44,24 @@ def calc_coefs_fraction(model):
 products = transform_data(products)
 train_data, test_data = load_train_test_sets(products)
 
-vectorizer = CountVectorizer(token_pattern=r'\b\w+\b')
-train_matrix = vectorizer.fit_transform(train_data['review_clean'])
+# vectorizer = CountVectorizer(token_pattern=r'\b\w+\b')
+vectorizer = joblib.load("data/serialized/vectorizer.pkl")
+# train_matrix = vectorizer.fit_transform(train_data['review_clean'])
+train_matrix = vectorizer.transform(train_data['review_clean'])
 
-sentiment_model = LogisticRegression()
-sentiment_model.fit(train_matrix, train_data['sentiment'])
+
+
+# sentiment_model = LogisticRegression()
+# sentiment_model.fit(train_matrix, train_data['sentiment'])
+sentiment_model = joblib.load("data/serialized/classifier.pkl")
+
 
 calc_coefs_fraction(sentiment_model)
 
 sample_test_data = test_data[10:13]
 
-# from sklearn.externals import joblib
-# joblib.dump(sentiment_model, 'data/classifier.pkl')
-
-from sklearn.externals import joblib
-joblib.dump(vectorizer, 'data/vectorizer.pkl')
+joblib.dump(sentiment_model, 'data/serialized/classifier.pkl')
+joblib.dump(vectorizer, 'data/serialized/vectorizer.pkl')
 
 print(sample_test_data.iloc[0]['review'])
 print(sample_test_data.iloc[1]['review'])
@@ -69,8 +73,17 @@ sample_test_matrix = vectorizer.transform(sample_test_data['review_clean'])
 scores = sentiment_model.decision_function(sample_test_matrix)
 print(scores)
 
+probabilities = sentiment_model.predict_proba(sample_test_matrix)
+print("probas", probabilities)
+
+from scipy.stats import logistic
+print(logistic.cdf(scores[0]))
+
+
 test_matrix = vectorizer.transform(test_data['review_clean'])
 labels = test_data['rating']
 
 prediction = sentiment_model.predict(test_matrix)
-print(prediction)
+print(prediction[0:100])
+
+print(sentiment_model.predict(sample_test_matrix))
