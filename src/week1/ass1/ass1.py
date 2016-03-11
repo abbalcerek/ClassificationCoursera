@@ -60,9 +60,9 @@ def set_up_vectorizer(train_data, words=None):
     return vectorizer
 
 
-def set_up_model(train_matrix, train_data):
+def set_up_model(train_matrix, train_data, simple=''):
     from os.path import isfile
-    path = 'data/serialized/classifier.pkl'
+    path = 'data/serialized/{}classifier.pkl'.format(simple)
     if isfile(path):
         return joblib.load(path)
     sentiment_model = LogisticRegression()
@@ -111,7 +111,10 @@ sentiment_model_acc(prediction, test_labels)
 vectorizer_word_subset = set_up_vectorizer(train_data, significant_words)
 train_matrix_word_subset = vectorizer_word_subset.fit_transform(train_data['review_clean'])
 test_matrix_word_subset = vectorizer_word_subset.transform(test_data['review_clean'])
+simple_sentiment_model = set_up_model(train_matrix_word_subset, train_data, 'simple')
+prediction = simple_sentiment_model.predict(test_matrix_word_subset)
 
+print(simple_sentiment_model.coef_)
 # best_reviews(test_data, test_matrix)
 # best_reviews(test_data, test_matrix, reverse=True)
 
