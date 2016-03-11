@@ -41,49 +41,76 @@ def calc_coefs_fraction(model):
     print("positive coefs: {}, negative coefs: {}".format(positive, negative))
     return positive, negative
 
+
+def set_up_vectorizer(train_data):
+    from os.path import isfile
+    path = 'data/serialized/vectorizer.pkl'
+    if isfile(path):
+        return joblib.load(path)
+    vectorizer = CountVectorizer(token_pattern=r'\b\w+\b')
+    vectorizer.fit_transform(train_data['review_clean'])
+    joblib.dump(vectorizer, path)
+    return vectorizer
+
+
+def set_up_model(train_matrix, train_data):
+    from os.path import isfile
+    path = 'data/serialized/classifier.pkl'
+    if isfile(path):
+        return joblib.load(path)
+    sentiment_model = LogisticRegression()
+    sentiment_model.fit(train_matrix, train_data['sentiment'])
+    joblib.dump(sentiment_model, path)
+    return sentiment_model
+
+
+def sample_data(test_data):
+    sample_test_data = test_data[10:13]
+    sample_test_matrix = vectorizer.transform(sample_test_data['review_clean'])
+    scores = sentiment_model.decision_function(sample_test_matrix)
+    print(scores)
+
+
+def best_reviews(test_data, test_matrix, n=20, reverse=False):
+    score = sentiment_model.decision_function(test_matrix)
+    indexed_score = zip(score, range(len(score)))
+    indexes = [index for (value, index) in sorted(indexed_score, reverse=not reverse)[:20]]
+    reves = test_data[['name', 'review']].iloc[indexes]
+    for rev in reves.iterrows():
+        print(rev[1]['name'], '\n')
+    print(indexes)
+
+
+def sentiment_model_acc(prediction, test_labels):
+    from sklearn.metrics import accuracy_score
+    print(accuracy_score(prediction, test_labels))
+
+
 products = transform_data(products)
 train_data, test_data = load_train_test_sets(products)
-
-# vectorizer = CountVectorizer(token_pattern=r'\b\w+\b')
-vectorizer = joblib.load("data/serialized/vectorizer.pkl")
-# train_matrix = vectorizer.fit_transform(train_data['review_clean'])
+vectorizer = set_up_vectorizer(train_data)
 train_matrix = vectorizer.transform(train_data['review_clean'])
-
-
-
-# sentiment_model = LogisticRegression()
-# sentiment_model.fit(train_matrix, train_data['sentiment'])
-sentiment_model = joblib.load("data/serialized/classifier.pkl")
-
-
+sentiment_model = set_up_model(train_matrix, train_data)
 calc_coefs_fraction(sentiment_model)
-
-sample_test_data = test_data[10:13]
-
-joblib.dump(sentiment_model, 'data/serialized/classifier.pkl')
-joblib.dump(vectorizer, 'data/serialized/vectorizer.pkl')
-
-print(sample_test_data.iloc[0]['review'])
-print(sample_test_data.iloc[1]['review'])
-print(sample_test_data.iloc[2]['review'])
-
-print(sample_test_data)
-
-sample_test_matrix = vectorizer.transform(sample_test_data['review_clean'])
-scores = sentiment_model.decision_function(sample_test_matrix)
-print(scores)
-
-probabilities = sentiment_model.predict_proba(sample_test_matrix)
-print("probas", probabilities)
-
-from scipy.stats import logistic
-print(logistic.cdf(scores[0]))
-
-
+sample_data(test_data)
 test_matrix = vectorizer.transform(test_data['review_clean'])
-labels = test_data['rating']
-
+test_labels = test_data['sentiment']
 prediction = sentiment_model.predict(test_matrix)
-print(prediction[0:100])
+print(prediction[:200])
+print(test_labels[:200])
+sentiment_model_acc(prediction, test_labels)
 
-print(sentiment_model.predict(sample_test_matrix))
+
+# best_reviews(test_data, test_matrix)
+# best_reviews(test_data, test_matrix, reverse=True)
+
+
+
+
+# probabilities = sentiment_model.predict_proba(sample_test_matrix)
+# print("probas", probabilities)
+#
+# from scipy.stats import logistic
+# print(logistic.cdf(scores[0]))
+
+# print(sentiment_model.predict(sample_test_matrix))
