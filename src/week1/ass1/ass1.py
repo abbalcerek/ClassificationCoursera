@@ -11,6 +11,10 @@ pd.set_option('expand_frame_repr', False)
 dtypes = {"name": str, "review": str, "rating": int}
 products = pd.read_csv('data/amazon_baby.csv', dtype=dtypes, sep=',', quotechar='"')
 
+significant_words = {'love', 'great', 'easy', 'old', 'little', 'perfect', 'loves',
+                     'well', 'able', 'car', 'broke', 'less', 'even', 'waste', 'disappointed',
+                     'work', 'product', 'money', 'would', 'return'}
+
 
 def remove_punctuation(text):
     from string import punctuation
@@ -42,12 +46,15 @@ def calc_coefs_fraction(model):
     return positive, negative
 
 
-def set_up_vectorizer(train_data):
+def set_up_vectorizer(train_data, words=None):
     from os.path import isfile
-    path = 'data/serialized/vectorizer.pkl'
+    simple = ''
+    if words:
+        simple = 'simple'
+    path = 'data/serialized/{}vectorizer.pkl'.format(simple)
     if isfile(path):
         return joblib.load(path)
-    vectorizer = CountVectorizer(token_pattern=r'\b\w+\b')
+    vectorizer = CountVectorizer(token_pattern=r'\b\w+\b', vocabulary=words)
     vectorizer.fit_transform(train_data['review_clean'])
     joblib.dump(vectorizer, path)
     return vectorizer
@@ -100,6 +107,10 @@ print(prediction[:200])
 print(test_labels[:200])
 sentiment_model_acc(prediction, test_labels)
 
+
+vectorizer_word_subset = set_up_vectorizer(train_data, significant_words)
+train_matrix_word_subset = vectorizer_word_subset.fit_transform(train_data['review_clean'])
+test_matrix_word_subset = vectorizer_word_subset.transform(test_data['review_clean'])
 
 # best_reviews(test_data, test_matrix)
 # best_reviews(test_data, test_matrix, reverse=True)
