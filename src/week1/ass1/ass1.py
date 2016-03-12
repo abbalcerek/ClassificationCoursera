@@ -1,20 +1,10 @@
 import pandas as pd
 import re
 from src.utils.utils import *
-from src.utils.config import project_root
-import numpy as np
+from src.utils.config import project_root, pandas_setup
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
-
-
-pd.set_option('expand_frame_repr', False)
-dtypes = {"name": str, "review": str, "rating": int}
-products = pd.read_csv(project_root('data/amazon_baby.csv'), dtype=dtypes, sep=',', quotechar='"')
-
-significant_words = {'love', 'great', 'easy', 'old', 'little', 'perfect', 'loves',
-                     'well', 'able', 'car', 'broke', 'less', 'even', 'waste', 'disappointed',
-                     'work', 'product', 'money', 'would', 'return'}
 
 
 def remove_punctuation(text):
@@ -31,7 +21,7 @@ def transform_data(prod):
     return prod
 
 
-def load_train_test_sets(prod):
+def load_train_test_sets(products):
     train_data_indexes = load_json_list(project_root("data/module-2-assignment-train-idx.json"))
     train_data = products.iloc[train_data_indexes]
     test_data_indexes = load_json_list(project_root("data/module-2-assignment-test-idx.json"))
@@ -43,6 +33,7 @@ def calc_coefs_fraction(model):
     coefs = model.coef_
     positive = len([c for c in coefs[0] if c >= 0])
     negative = len([c for c in coefs[0] if c < 0])
+    print('--------coefs----------')
     print("positive coefs: {}, negative coefs: {}".format(positive, negative))
     return positive, negative
 
@@ -93,18 +84,26 @@ def best_reviews(test_data, sentiment_model, test_matrix, n=20, reverse=False):
     # print(indexes)
 
 
-def sentiment_model_acc(prediction, test_labels):
+def sentiment_model_acc(prediction, test_labels, on):
     from sklearn.metrics import accuracy_score
-    print(accuracy_score(prediction, test_labels))
+    accuracy = accuracy_score(prediction, test_labels)
+    print('-------accuracy {}: {}-------'.format(on, accuracy))
+    return accuracy
 
 
 def check_coef_weight(vectorizer, model, word):
-    vectorized = vectorizer.transform(word)
-    print("vecotrized", vectorizer_word_subset)
-    return model.decision_function(vectorized)
+    vectorized = vectorizer.transform([word])
+    return model.decision_function(vectorized) - model.intercept_
 
 
-def asses_sentiment_model(product, train_data, test_data):
+def model_features(vectorizer, model, words):
+    print('------model features----------')
+    for word in words:
+        print(word, check_coef_weight(vectorizer, model, word))
+    calc_coefs_fraction(model)
+
+
+def asses_sentiment_model(train_data, test_data, words):
     vectorizer = set_up_vectorizer(train_data)
     train_matrix = vectorizer.transform(train_data['review_clean'])
     sentiment_model = set_up_model(train_matrix, train_data)
@@ -112,35 +111,59 @@ def asses_sentiment_model(product, train_data, test_data):
     sample_data(vectorizer, sentiment_model, test_data)
     test_matrix = vectorizer.transform(test_data['review_clean'])
     test_labels = test_data['sentiment']
+    train_labels = train_data['sentiment']
     prediction = sentiment_model.predict(test_matrix)
-    sentiment_model_acc(prediction, test_labels)
+    prediction_train = sentiment_model.predict(train_matrix)
+    sentiment_model_acc(prediction, test_labels, 'sentiment on test')
+    sentiment_model_acc(prediction_train, train_labels, 'sentiment on train')
     best_reviews(test_data, sentiment_model, test_matrix)
     best_reviews(test_data, sentiment_model, test_matrix, reverse=True)
+    model_features(vectorizer, sentiment_model, words)
 
 
-products = transform_data(products)
-train_data, test_data = load_train_test_sets(products)
-asses_sentiment_model(products, train_data, test_data)
+def majority_classifier(train_data, test_data):
+    print('--------majority model---------')
+    train = train_data['sentiment']
+    positives = len([c for c in train if c >= 0])
+    clazz = -1
+    if len(train) < 2 * positives:
+        clazz = 1
+    from sklearn.metrics import accuracy_score
+    test = test_data['sentiment']
+    prediction = [clazz for i in range(len(test))]
+    accuracy = accuracy_score(test, prediction)
+    print('accuracy:', accuracy)
 
 
-vectorizer_word_subset = set_up_vectorizer(train_data, significant_words)
-train_matrix_word_subset = vectorizer_word_subset.fit_transform(train_data['review_clean'])
-test_matrix_word_subset = vectorizer_word_subset.transform(test_data['review_clean'])
-simple_sentiment_model = set_up_model(train_matrix_word_subset, train_data, 'simple')
-prediction = simple_sentiment_model.predict(test_matrix_word_subset)
+def asses_simple_model(train_data, test_data, significant_words):
+    vectorizer_word_subset = set_up_vectorizer(train_data, significant_words)
+    train_matrix_word_subset = vectorizer_word_subset.fit_transform(train_data['review_clean'])
+    test_matrix_word_subset = vectorizer_word_subset.transform(test_data['review_clean'])
+    simple_sentiment_model = set_up_model(train_matrix_word_subset, train_data, 'simple')
+    prediction = simple_sentiment_model.predict(test_matrix_word_subset)
+    prediction_train = simple_sentiment_model.predict(train_matrix_word_subset)
+    test_labels = test_data['sentiment']
+    train_labels = train_data['sentiment']
+    sentiment_model_acc(prediction, test_labels, 'simple sentiment on test')
+    sentiment_model_acc(prediction_train, train_labels, 'simple sentiment on train')
+    model_features(vectorizer_word_subset, simple_sentiment_model, significant_words)
 
-for word in significant_words:
-    print(word, check_coef_weight(vectorizer_word_subset, simple_sentiment_model, word))
 
-print(simple_sentiment_model.coef_)
+def main():
+    pandas_setup()
+    dtypes = {"name": str, "review": str, "rating": int}
+    products = pd.read_csv(project_root('data/amazon_baby.csv'), dtype=dtypes, sep=',', quotechar='"')
+
+    significant_words = {'love', 'great', 'easy', 'old', 'little', 'perfect', 'loves',
+                     'well', 'able', 'car', 'broke', 'less', 'even', 'waste', 'disappointed',
+                     'work', 'product', 'money', 'would', 'return'}
+
+    products = transform_data(products)
+    train_data, test_data = load_train_test_sets(products)
+    asses_sentiment_model(train_data, test_data, significant_words)
+    asses_simple_model(train_data, test_data, significant_words)
+    majority_classifier(train_data, test_data)
 
 
-
-
-# probabilities = sentiment_model.predict_proba(sample_test_matrix)
-# print("probas", probabilities)
-#
-# from scipy.stats import logistic
-# print(logistic.cdf(scores[0]))
-
-# print(sentiment_model.predict(sample_test_matrix))
+if __name__ == '__main__':
+    main()
