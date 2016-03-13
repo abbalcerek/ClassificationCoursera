@@ -7,11 +7,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
 
 
-def remove_punctuation(text):
-    from string import punctuation
-    if pd.isnull(text):
-        return ''
-    return re.sub('[{}]'.format(punctuation), '', text)
+# def remove_punctuation(text):
+#     from string import punctuation
+#     if pd.isnull(text):
+#         return ''
+#     return re.sub('[{}]'.format(punctuation), '', text)
 
 
 def transform_data(prod):
@@ -155,8 +155,8 @@ def main():
     products = pd.read_csv(project_root('data/amazon_baby.csv'), dtype=dtypes, sep=',', quotechar='"')
 
     significant_words = {'love', 'great', 'easy', 'old', 'little', 'perfect', 'loves',
-                     'well', 'able', 'car', 'broke', 'less', 'even', 'waste', 'disappointed',
-                     'work', 'product', 'money', 'would', 'return'}
+                         'well', 'able', 'car', 'broke', 'less', 'even', 'waste', 'disappointed',
+                         'work', 'product', 'money', 'would', 'return'}
 
     products = transform_data(products)
     train_data, test_data = load_train_test_sets(products)
