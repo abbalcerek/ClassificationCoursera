@@ -7,9 +7,9 @@ def go_down_dir(path, levels):
 
 
 def project_root(path=''):
-    import os
-    curr_path = os.path.realpath(__file__)
-    return "\\".join([go_down_dir(curr_path, 2), path])
+    from os.path import join, realpath
+    curr_path = realpath(__file__)
+    return join(go_down_dir(curr_path, 2), path)
 
 
 def pandas_setup():

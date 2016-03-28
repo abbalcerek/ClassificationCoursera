@@ -19,3 +19,16 @@ def remove_punctuation(text):
     if pd.isnull(text):
         return ''
     return re.sub('[{}]'.format(punctuation), '', text)
+
+
+
+def sigmoid(x):
+  import math
+  return 1 / (1 + math.exp(-x))
+
+
+def vSigmoid(array):
+    import numpy as np
+    return np.vectorize(sigmoid)(array)
+
+
