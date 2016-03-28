@@ -24,10 +24,6 @@ def run_model(train_matrix, labels, test_feature_matrix, test_label_array, l2_pe
     return print_important_words(coefs, 5)
 
 
-def load_words(word_pairs):
-    ...
-
-
 def main():
     products = set_up_products()
     train_set, test_set = load_train_test_sets(products,
@@ -61,6 +57,8 @@ def main():
     positive_words = [word for (value, word) in positive_pairs]
     negative_words = [word for (value, word) in negative_pairs]
     make_coefficient_plot(table, positive_words, negative_words, l2_penalty_list=[0, 4, 10, 1e2, 1e3, 1e5])
+    # TODO: pull best 5 best and worst from lambda = 0 for all lambdas
+
 
 if __name__ == '__main__':
     import sys
