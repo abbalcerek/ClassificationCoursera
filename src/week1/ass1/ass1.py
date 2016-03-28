@@ -1,5 +1,4 @@
 import pandas as pd
-import re
 from src.utils.utils import *
 from src.utils.config import project_root, pandas_setup
 from sklearn.feature_extraction.text import CountVectorizer
@@ -7,26 +6,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
 
 
-# def remove_punctuation(text):
-#     from string import punctuation
-#     if pd.isnull(text):
-#         return ''
-#     return re.sub('[{}]'.format(punctuation), '', text)
-
-
 def transform_data(prod):
     prod['review_clean'] = prod['review'].apply(remove_punctuation)
     prod = prod[prod['rating'] != 3]
     prod['sentiment'] = prod['rating'].apply(lambda rating: 1 if rating > 3 else -1)
     return prod
-
-
-def load_train_test_sets(products):
-    train_data_indexes = load_json_list(project_root("data/module-2-assignment-train-idx.json"))
-    train_data = products.iloc[train_data_indexes]
-    test_data_indexes = load_json_list(project_root("data/module-2-assignment-test-idx.json"))
-    test_data = products.iloc[test_data_indexes]
-    return train_data, test_data
 
 
 def calc_coefs_fraction(model):
@@ -159,7 +143,9 @@ def main():
                          'work', 'product', 'money', 'would', 'return'}
 
     products = transform_data(products)
-    train_data, test_data = load_train_test_sets(products)
+    train_data, test_data = load_train_test_sets(products,
+                                                 "module-2-assignment-train-idx.json",
+                                                 "module-2-assignment-test-idx.json")
     asses_sentiment_model(train_data, test_data, significant_words)
     asses_simple_model(train_data, test_data, significant_words)
     majority_classifier(train_data, test_data)
