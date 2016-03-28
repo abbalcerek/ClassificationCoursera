@@ -39,7 +39,8 @@ def logistic_regression(feature_matrix, sentiment, initial_coefficients, step_si
         indicator = (sentiment + 1) / 2
 
         errors = indicator - predictions
-        derivative = feature_derivative(errors, feature_matrix) -2 * l2_penalty * coefficients
+        derivative = feature_derivative(errors, feature_matrix) - 2 * l2_penalty * coefficients
+        derivative[0] += 2 * l2_penalty * coefficients[0]
         coefficients += step_size * derivative
 
         if debug and (itr <= 15 or (itr <= 100 and itr % 10 == 0) or (itr <= 1000 and itr % 100 == 0)

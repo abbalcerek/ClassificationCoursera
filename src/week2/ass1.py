@@ -61,11 +61,13 @@ def important_words(coefs, words, best=True, number=10):
     sorted_pairs = sorted(zip(coefs[1:], words), reverse=best)
     for (coef, word) in sorted_pairs[0: number]:
         print('weight of word {}: {}'.format(word, coef))
+    return sorted_pairs[0: number]
 
 
-def print_important_words(coefs):
-    important_words(coefs, IMPORTANT_WORDS, True)
-    important_words(coefs, IMPORTANT_WORDS, False)
+def print_important_words(coefs, number=10):
+    positive = important_words(coefs, IMPORTANT_WORDS, True, number)
+    negative = important_words(coefs, IMPORTANT_WORDS, False, number)
+    return positive, negative
 
 
 def main():

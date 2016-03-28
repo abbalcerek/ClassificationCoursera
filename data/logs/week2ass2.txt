@@ -1,0 +1,183 @@
+------penalty=0---------
+---train
+positive review count: 20566
+accuracy: 0.7851561577866434
+llikelihood: 41243.8839913919
+---test
+positive review count: 5201
+accuracy: 0.781439641490057
+llikelihood: 9975.138355391016
+------------important words ---------------
+weight of word love: 1.0585539820695438
+weight of word loves: 1.0524840477983537
+weight of word easy: 0.9845588198731922
+weight of word perfect: 0.8356932076383463
+weight of word great: 0.8016249897781761
+------------important words ---------------
+weight of word disappointed: -0.9554366281707274
+weight of word money: -0.7687931346121053
+weight of word return: -0.7420849546350395
+weight of word waste: -0.6178091779812257
+weight of word returned: -0.5727070451581127
+------penalty=4---------
+---train
+positive review count: 20566
+accuracy: 0.7851089445480512
+llikelihood: 40721.39851333938
+---test
+positive review count: 5200
+accuracy: 0.7815330034543927
+llikelihood: 9801.93670370336
+------------important words ---------------
+weight of word love: 1.0508556809936305
+weight of word loves: 1.043902912902074
+weight of word easy: 0.9776001497817036
+weight of word perfect: 0.8285546747911549
+weight of word great: 0.7968969330033085
+------------important words ---------------
+weight of word disappointed: -0.9469799182587182
+weight of word money: -0.762733976399873
+weight of word return: -0.7355024007212442
+weight of word waste: -0.612474509202332
+weight of word returned: -0.5675184854879843
+------penalty=10---------
+---train
+positive review count: 20565
+accuracy: 0.7849909114515711
+llikelihood: 39952.88134757522
+---test
+positive review count: 5198
+accuracy: 0.7817197273830642
+llikelihood: 9548.47387162602
+------------important words ---------------
+weight of word love: 1.039528515846586
+weight of word loves: 1.03126534689187
+weight of word easy: 0.96736183663147
+weight of word perfect: 0.8180378375428206
+weight of word great: 0.7899351472214043
+------------important words ---------------
+weight of word disappointed: -0.9345184199406323
+weight of word money: -0.753818293983956
+weight of word return: -0.7258065666864304
+weight of word waste: -0.6046202518853265
+weight of word returned: -0.5598698491588028
+------penalty=100.0---------
+---train
+positive review count: 20544
+accuracy: 0.7839758268218409
+llikelihood: 30276.55665889437
+---test
+positive review count: 5193
+accuracy: 0.781066193632714
+llikelihood: 6489.195116132501
+------------important words ---------------
+weight of word love: 0.8966441331010778
+weight of word loves: 0.8707939748225283
+weight of word easy: 0.8382448329554507
+weight of word great: 0.7014250736748338
+weight of word perfect: 0.6841429449844793
+------------important words ---------------
+weight of word disappointed: -0.775625136545788
+weight of word money: -0.6414057524811044
+weight of word return: -0.6026463562873889
+weight of word waste: -0.5051887579435835
+weight of word returned: -0.4620556794344292
+------penalty=1000.0---------
+---train
+positive review count: 21200
+accuracy: 0.7758551497839994
+llikelihood: -1962.1350914038655
+---test
+positive review count: 5431
+accuracy: 0.7713565493417982
+llikelihood: -2085.097153119804
+------------important words ---------------
+weight of word love: 0.41835364413392695
+weight of word easy: 0.4019039713631913
+weight of word great: 0.3760117142216708
+weight of word loves: 0.345870256628853
+weight of word little: 0.25122065395859255
+------------important words ---------------
+weight of word money: -0.27588337391474477
+weight of word disappointed: -0.2660951817959908
+weight of word return: -0.2151985237857179
+weight of word work: -0.20704709769493593
+weight of word waste: -0.1906306530215114
+------penalty=100000.0---------
+---train
+positive review count: 30393
+accuracy: 0.6803663747314747
+llikelihood: -29122.787418296997
+---test
+positive review count: 7762
+accuracy: 0.667818130893474
+llikelihood: -7436.661222093924
+------------important words ---------------
+weight of word love: 0.00904173729769529
+weight of word great: 0.008949560497355647
+weight of word easy: 0.008807681212104075
+weight of word loves: 0.006149882555744081
+weight of word little: 0.005940513640376524
+------------important words ---------------
+weight of word would: -0.008127027099004498
+weight of word product: -0.006210896399933976
+weight of word money: -0.005487210455090583
+weight of word work: -0.00478125743984475
+weight of word get: -0.004578331906310007
+======word coef diagram=========
+[([(1.0585539820695438, 'love'), (1.0524840477983537, 'loves'), (0.98455881987319216, 'easy'), (0.83569320763834631, 'perfect'), (0.80162498977817609, 'great')], [(-0.95543662817072739, 'disappointed'), (-0.7687931346121053, 'money'), (-0.74208495463503954, 'return'), (-0.6178091779812257, 'waste'), (-0.57270704515811266, 'returned')]), ([(1.0508556809936305, 'love'), (1.043902912902074, 'loves'), (0.97760014978170362, 'easy'), (0.82855467479115485, 'perfect'), (0.79689693300330855, 'great')], [(-0.94697991825871819, 'disappointed'), (-0.76273397639987295, 'money'), (-0.73550240072124418, 'return'), (-0.61247450920233204, 'waste'), (-0.56751848548798434, 'returned')]), ([(1.0395285158465859, 'love'), (1.03126534689187, 'loves'), (0.96736183663147002, 'easy'), (0.81803783754282056, 'perfect'), (0.78993514722140434, 'great')], [(-0.93451841994063234, 'disappointed'), (-0.75381829398395594, 'money'), (-0.7258065666864304, 'return'), (-0.60462025188532653, 'waste'), (-0.55986984915880278, 'returned')]), ([(0.89664413310107782, 'love'), (0.87079397482252829, 'loves'), (0.83824483295545071, 'easy'), (0.70142507367483375, 'great'), (0.68414294498447925, 'perfect')], [(-0.77562513654578802, 'disappointed'), (-0.64140575248110443, 'money'), (-0.60264635628738894, 'return'), (-0.50518875794358353, 'waste'), (-0.46205567943442921, 'returned')]), ([(0.41835364413392695, 'love'), (0.40190397136319128, 'easy'), (0.37601171422167079, 'great'), (0.34587025662885301, 'loves'), (0.25122065395859255, 'little')], [(-0.27588337391474477, 'money'), (-0.26609518179599079, 'disappointed'), (-0.21519852378571791, 'return'), (-0.20704709769493593, 'work'), (-0.19063065302151139, 'waste')]), ([(0.0090417372976952896, 'love'), (0.0089495604973556468, 'great'), (0.0088076812121040751, 'easy'), (0.0061498825557440807, 'loves'), (0.0059405136403765241, 'little')], [(-0.0081270270990044975, 'would'), (-0.0062108963999339762, 'product'), (-0.0054872104550905826, 'money'), (-0.0047812574398447497, 'work'), (-0.0045783319063100068, 'get')])]
+   disappointed      easy     great      love     loves     money   perfect  \
+0     -0.955437  0.984559  0.801625  1.058554  1.052484 -0.768793  0.835693   
+
+     return  returned     waste  
+0 -0.742085 -0.572707 -0.617809  
+   disappointed    easy     great      love     loves     money   perfect  \
+4      -0.94698  0.9776  0.796897  1.050856  1.043903 -0.762734  0.828555   
+
+     return  returned     waste  
+4 -0.735502 -0.567518 -0.612475  
+    disappointed      easy     great      love     loves     money   perfect  \
+10     -0.934518  0.967362  0.789935  1.039529  1.031265 -0.753818  0.818038   
+
+      return  returned    waste  
+10 -0.725807  -0.55987 -0.60462  
+     disappointed      easy     great      love     loves     money   perfect  \
+100     -0.775625  0.838245  0.701425  0.896644  0.870794 -0.641406  0.684143   
+
+       return  returned     waste  
+100 -0.602646 -0.462056 -0.505189  
+      disappointed      easy     great    little      love    loves     money  \
+1000     -0.266095  0.401904  0.376012  0.251221  0.418354  0.34587 -0.275883   
+
+        return     waste      work  
+1000 -0.215199 -0.190631 -0.207047  
+            easy       get    great    little      love    loves     money  \
+100000  0.008808 -0.004578  0.00895  0.005941  0.009042  0.00615 -0.005487   
+
+         product      work     would  
+100000 -0.006211 -0.004781 -0.008127  
+[   disappointed      easy     great      love     loves     money   perfect  \
+0     -0.955437  0.984559  0.801625  1.058554  1.052484 -0.768793  0.835693   
+
+     return  returned     waste  
+0 -0.742085 -0.572707 -0.617809  ,    disappointed    easy     great      love     loves     money   perfect  \
+4      -0.94698  0.9776  0.796897  1.050856  1.043903 -0.762734  0.828555   
+
+     return  returned     waste  
+4 -0.735502 -0.567518 -0.612475  ,     disappointed      easy     great      love     loves     money   perfect  \
+10     -0.934518  0.967362  0.789935  1.039529  1.031265 -0.753818  0.818038   
+
+      return  returned    waste  
+10 -0.725807  -0.55987 -0.60462  ,      disappointed      easy     great      love     loves     money   perfect  \
+100     -0.775625  0.838245  0.701425  0.896644  0.870794 -0.641406  0.684143   
+
+       return  returned     waste  
+100 -0.602646 -0.462056 -0.505189  ,       disappointed      easy     great    little      love    loves     money  \
+1000     -0.266095  0.401904  0.376012  0.251221  0.418354  0.34587 -0.275883   
+
+        return     waste      work  
+1000 -0.215199 -0.190631 -0.207047  ,             easy       get    great    little      love    loves     money  \
+100000  0.008808 -0.004578  0.00895  0.005941  0.009042  0.00615 -0.005487   
+
+         product      work     would  
+100000 -0.006211 -0.004781 -0.008127  ]
