@@ -1,7 +1,8 @@
 import pandas as pd
 
 
-class OneHotEncoder():
+class OneHotTransformer:
+
     def __init__(self, categorical, columns):
         self.__columns = columns
         self.__categorical = categorical

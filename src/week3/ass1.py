@@ -4,6 +4,8 @@ from src.utils.config import project_root
 from src.utils.utils import load_train_test_sets
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
+from src.week3.OneHotTransformer import OneHotTransformer
+
 pd.set_option('expand_frame_repr', False)
 
 loans = pd.read_csv(project_root("data/lending-club-data.csv"))
@@ -50,13 +52,8 @@ for name in categorical:
 categorical_indexes = [i for i in range(len(loans.columns)) if loans.columns[i] in categorical]
 print(categorical_indexes)
 
-for feature in categorical:
-    loans_data_one_hot_encoded = loans[feature].apply(lambda x: {x: 1})
-    loans_data_unpacked = loans_data_one_hot_encoded.unpack(column_name_prefix=feature)
+transformer = OneHotTransformer(categorical, loans.columns)
+transformer.fit(loans)
+fitted = transformer.transform_frame(loans)
 
-    # Change None's to 0's
-    for column in loans_data_unpacked.column_names():
-        loans_data_unpacked[column] = loans_data_unpacked[column].fillna(0)
-
-    loans.remove_column(feature)
-    loans.add_columns(loans_data_unpacked)
+print(fitted)
