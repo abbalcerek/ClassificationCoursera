@@ -21,7 +21,8 @@ def run_model(train_matrix, labels, test_feature_matrix, test_label_array, l2_pe
     print("---test")
     evaluate(coefs, test_label_array, test_prediction)
     print('llikelihood: {}'.format(compute_log_likelihood(test_feature_matrix, test_label_array, coefs, l2_penalty)))
-    return print_important_words(coefs, 5)
+    print_important_words(coefs, 5)
+    return coefs
 
 
 def main():
@@ -35,34 +36,28 @@ def main():
         = get_numpy_data(test_set, IMPORTANT_WORDS, 'sentiment')
 
     penalties = [0, 4, 10, 1e2, 1e3, 1e5]
-    all_word_pairs = []
+    coefs = []
     for penalty in penalties:
-        all_word_pairs.append(
+        coefs.append(
             run_model(train_feature_matrix, train_label_array, test_feature_matrix, test_label_array, penalty))
 
     print("======word coef diagram=========")
-    print(all_word_pairs)
+    sorted_pairs = sorted(zip(coefs[0][1:], IMPORTANT_WORDS))
+    sorted_words = [word for (value, word) in sorted_pairs]
+    top_positive_wrods, top_negative_words = sorted_words[:5], sorted_words[-5:]
 
-    penalty_dicts = [pd.DataFrame({word: value for (value, word)
-                                   in positive + negative}, index=[penalty])
-                     for ((negative, positive), penalty) in zip(all_word_pairs, penalties)]
+    dicts = [{word: value for (value, word) in zip(coef[1:], IMPORTANT_WORDS)
+          if word in top_negative_words or word in top_positive_wrods} for coef in coefs]
+    frames = [pd.DataFrame(d, index=[penalty]) for (penalty, d) in zip(penalties, dicts)]
+    table = pd.concat(frames)
 
-    for dick in penalty_dicts:
-        print(dick)
-
-    table = pd.concat(penalty_dicts)
-    print(penalty_dicts)
-
-    positive_pairs, negative_pairs = all_word_pairs[0]
-    positive_words = [word for (value, word) in positive_pairs]
-    negative_words = [word for (value, word) in negative_pairs]
-    make_coefficient_plot(table, positive_words, negative_words, l2_penalty_list=[0, 4, 10, 1e2, 1e3, 1e5])
-    # TODO: pull best 5 best and worst from lambda = 0 for all lambdas
+    make_coefficient_plot(table, top_positive_wrods, top_negative_words, l2_penalty_list=[0, 4, 10, 1e2, 1e3, 1e5])
 
 
 if __name__ == '__main__':
     import sys
     import os
+    pd.set_option('expand_frame_repr', False)
     path = project_root("data/logs")
     if not os.path.exists(path):
         os.makedirs(path)

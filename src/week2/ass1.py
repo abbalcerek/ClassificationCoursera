@@ -65,9 +65,8 @@ def important_words(coefs, words, best=True, number=10):
 
 
 def print_important_words(coefs, number=10):
-    positive = important_words(coefs, IMPORTANT_WORDS, True, number)
-    negative = important_words(coefs, IMPORTANT_WORDS, False, number)
-    return positive, negative
+    important_words(coefs, IMPORTANT_WORDS, True, number)
+    important_words(coefs, IMPORTANT_WORDS, False, number)
 
 
 def main():
