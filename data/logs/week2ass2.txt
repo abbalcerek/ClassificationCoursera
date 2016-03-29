@@ -125,27 +125,6 @@ weight of word money: -0.005487210455090583
 weight of word work: -0.00478125743984475
 weight of word get: -0.004578331906310007
 ======word coef diagram=========
-positive:  ['disappointed', 'money', 'return', 'waste', 'returned']
-negative:  ['great', 'perfect', 'easy', 'loves', 'love']
-   disappointed      easy     great      love     loves     money   perfect    return  returned     waste
-0     -0.955437  0.984559  0.801625  1.058554  1.052484 -0.768793  0.835693 -0.742085 -0.572707 -0.617809
-   disappointed    easy     great      love     loves     money   perfect    return  returned     waste
-4      -0.94698  0.9776  0.796897  1.050856  1.043903 -0.762734  0.828555 -0.735502 -0.567518 -0.612475
-    disappointed      easy     great      love     loves     money   perfect    return  returned    waste
-10     -0.934518  0.967362  0.789935  1.039529  1.031265 -0.753818  0.818038 -0.725807  -0.55987 -0.60462
-     disappointed      easy     great      love     loves     money   perfect    return  returned     waste
-100     -0.775625  0.838245  0.701425  0.896644  0.870794 -0.641406  0.684143 -0.602646 -0.462056 -0.505189
-      disappointed      easy     great      love    loves     money   perfect    return  returned     waste
-1000     -0.266095  0.401904  0.376012  0.418354  0.34587 -0.275883  0.250614 -0.215199 -0.150021 -0.190631
-        disappointed      easy    great      love    loves     money   perfect   return  returned     waste
-100000     -0.004013  0.008808  0.00895  0.009042  0.00615 -0.005487  0.003989 -0.00373 -0.002225 -0.003345
-        disappointed      easy     great      love     loves     money   perfect    return  returned     waste
-0          -0.955437  0.984559  0.801625  1.058554  1.052484 -0.768793  0.835693 -0.742085 -0.572707 -0.617809
-4          -0.946980  0.977600  0.796897  1.050856  1.043903 -0.762734  0.828555 -0.735502 -0.567518 -0.612475
-10         -0.934518  0.967362  0.789935  1.039529  1.031265 -0.753818  0.818038 -0.725807 -0.559870 -0.604620
-100        -0.775625  0.838245  0.701425  0.896644  0.870794 -0.641406  0.684143 -0.602646 -0.462056 -0.505189
-1000       -0.266095  0.401904  0.376012  0.418354  0.345870 -0.275883  0.250614 -0.215199 -0.150021 -0.190631
-100000     -0.004013  0.008808  0.008950  0.009042  0.006150 -0.005487  0.003989 -0.003730 -0.002225 -0.003345
            great   perfect      easy     loves      love
 0       0.801625  0.835693  0.984559  1.052484  1.058554
 4       0.796897  0.828555  0.977600  1.043903  1.050856
