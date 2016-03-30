@@ -85,13 +85,13 @@ prediction = classifier.predict(validation_set)
 
 print(accuracy_score(validation_labels, prediction))
 
-small_model = DecisionTreeClassifier(max_depth=2)  # the best
+small_model = DecisionTreeClassifier(max_depth=2)  # the best 5
 small_model.fit(train_set, training_labels)
 small_model_prediction = small_model.predict(validation_set)
 
 print(accuracy_score(validation_labels, small_model_prediction))
 
-big_model = DecisionTreeClassifier(max_depth=10)  # the best
+big_model = DecisionTreeClassifier(max_depth=10)
 big_model.fit(train_set, training_labels)
 big_model_prediction = big_model.predict(validation_set)
 
