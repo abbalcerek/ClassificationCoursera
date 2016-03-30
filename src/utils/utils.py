@@ -48,8 +48,12 @@ def get_numpy_data(dataframe, features, label):
 def load_train_test_sets(products, train_path, test_path):
     from os.path import join
     train_data_indexes = load_json_list(project_root(join("data", train_path)))
-    train_data = products.iloc[train_data_indexes]
+    train_data_filtered_index = sorted(list(set(products.index).intersection(set(train_data_indexes))))
+    print(train_data_filtered_index)
+    print(sorted(products.index))
+    train_data = products.iloc[train_data_filtered_index]
     test_data_indexes = load_json_list(project_root(join("data", test_path)))
-    test_data = products.iloc[test_data_indexes]
+    test_data_filtered_indexes = set(products.index).intersection(test_data_indexes)
+    test_data = products.iloc[products.index]
     return train_data, test_data
 
