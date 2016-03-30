@@ -69,3 +69,24 @@ train_set, validation_set \
 print(train_set.shape, validation_set.shape)
 print(list(train_set.columns))
 
+from sklearn.tree import DecisionTreeClassifier
+
+classifier = DecisionTreeClassifier(max_depth=6)
+
+training_labels = train_set[target]
+del train_set[target]
+classifier.fit(train_set, training_labels)
+
+from sklearn.metrics import accuracy_score
+
+validation_labels = validation_set[target]
+del validation_set[target]
+prediction = classifier.predict(validation_set)
+
+print(accuracy_score(validation_labels, prediction))
+
+small_model = DecisionTreeClassifier(max_depth=2)
+small_model.fit(train_set, training_labels)
+small_model_prediction = small_model.predict(validation_set)
+
+print(accuracy_score(validation_labels, small_model_prediction))
