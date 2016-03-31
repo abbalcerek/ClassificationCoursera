@@ -87,6 +87,8 @@ print(list(train_data_transformed.columns))
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.tree import export_graphviz
+
 
 # train data
 training_labels = train_data_transformed[target]
@@ -98,6 +100,7 @@ del validation_data_transformed[target]
 classifier = DecisionTreeClassifier(max_depth=6)
 classifier.fit(train_data_transformed, training_labels)
 prediction = classifier.predict(validation_data_transformed)
+export_graphviz(classifier)
 print(accuracy_score(validation_labels, prediction))
 
 small_model = DecisionTreeClassifier(max_depth=2)  # the best 5
