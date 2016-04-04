@@ -88,6 +88,7 @@ print(list(train_data_transformed.columns))
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.tree import export_graphviz
+from sklearn.metrics import confusion_matrix
 
 
 # train data
@@ -95,20 +96,55 @@ training_labels = train_data_transformed[target]
 del train_data_transformed[target]
 # validation data
 validation_labels = validation_data_transformed[target]
+
+# sample validation
+validation_safe2 = validation_data_transformed[validation_data_transformed[target] == 1][0:2]
+validation_risky2 = validation_data_transformed[validation_data_transformed[target] == -1][0:2]
+validation_set2 = validation_safe2.append(validation_risky2)
+label_safe2 = validation_safe2[:2][target]
+label_risky2 = validation_risky2[:2][target]
+label2 = label_safe2.append(label_risky2)
+
+validation_labels2 = validation_set2[target]
+del validation_set2[target]
+
 del validation_data_transformed[target]
 
-classifier = DecisionTreeClassifier(max_depth=6)
+print("======model depth={} sample data=========".format(6))
+classifier = DecisionTreeClassifier(max_depth=2)
 classifier.fit(train_data_transformed, training_labels)
-prediction = classifier.predict(validation_data_transformed)
+prediction = classifier.predict(validation_set2)
+predict_proba = classifier.predict_proba(validation_set2)
+print(prediction[:4])
+print(predict_proba[:4])
 export_graphviz(classifier)
-print(accuracy_score(validation_labels, prediction))
+print(accuracy_score(label2, prediction))
 
-small_model = DecisionTreeClassifier(max_depth=2)  # the best 5
-small_model.fit(train_data_transformed, training_labels)
-small_model_prediction = small_model.predict(validation_data_transformed)
-print(accuracy_score(validation_labels, small_model_prediction))
 
-big_model = DecisionTreeClassifier(max_depth=10)
-big_model.fit(train_data_transformed, training_labels)
-big_model_prediction = big_model.predict(validation_data_transformed)
-print(accuracy_score(validation_labels, big_model_prediction))
+def run_classifier(depth):
+    print("======model depth={}=========".format(depth))
+    classifier = DecisionTreeClassifier(max_depth=depth)
+    classifier.fit(train_data_transformed, training_labels)
+    prediction = classifier.predict(validation_data_transformed)
+    predict_proba = classifier.predict_proba(validation_data_transformed)
+    print(prediction[:5])
+    print(predict_proba[:5])
+    export_graphviz(classifier)
+    print(confusion_matrix(validation_labels, prediction))
+    print(accuracy_score(validation_labels, prediction))
+
+
+run_classifier(6)
+run_classifier(2)
+run_classifier(10)
+
+print(1661 * 10000 + 1715 * 20000)
+# small_model = DecisionTreeClassifier(max_depth=2)  # the best 5
+# small_model.fit(train_data_transformed, training_labels)
+# small_model_prediction = small_model.predict(validation_data_transformed)
+# print(accuracy_score(validation_labels, small_model_prediction))
+#
+# big_model = DecisionTreeClassifier(max_depth=10)
+# big_model.fit(train_data_transformed, training_labels)
+# big_model_prediction = big_model.predict(validation_data_transformed)
+# print(accuracy_score(validation_labels, big_model_prediction))
