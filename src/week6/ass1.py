@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score, average_precision_score, recall_score, precision_score, precision_recall_curve, confusion_matrix
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 products = pd.read_csv(project_root('data/amazon_baby.csv'))
@@ -58,7 +59,39 @@ asses_classifier(train_labels, training_prediction, logistic_regression.classes_
 asses_classifier(test_labels, prediction, logistic_regression.classes_, 'LR on validation')
 asses_classifier(test_labels, np.ones(len(test_labels)), logistic_regression.classes_, 'Majority on validation')
 
+
+def threshold_prediction(proba_pred, threshold):
+    return [1 if i[1] > threshold else -1 for i in proba_pred]
+
+
+proba_prediction = logistic_regression.predict_proba(test_matrix)
 threshold = 0.9
 
-threshold_prediction = [1 if i[1] > threshold else -1 for i in logistic_regression.predict_proba(test_matrix)]
-asses_classifier(test_labels, threshold_prediction, logistic_regression.classes_, "threshold: {}".format(threshold))
+threshold_prediction09 = threshold_prediction(proba_prediction, threshold)
+asses_classifier(test_labels, threshold_prediction09, logistic_regression.classes_, "threshold: {}".format(threshold))
+
+threshold_values = np.linspace(0.5, 1, num=100)
+print(threshold_values)
+precision_all = [precision_score(test_labels, threshold_prediction(proba_prediction, i))
+                 for i in threshold_values]
+
+recall_all = [recall_score(test_labels, threshold_prediction(proba_prediction, i))
+              for i in threshold_values]
+
+print(len(precision_all), len(recall_all))
+
+print(precision_all)
+print(recall_all)
+
+
+def plot_pr_curve(precision, recall, title):
+    plt.rcParams['figure.figsize'] = 7, 5
+    plt.locator_params(axis='x', nbins=5)
+    plt.plot(precision, recall, 'b-', linewidth=4.0, color='#B0017F')
+    plt.title(title)
+    plt.xlabel('Precision')
+    plt.ylabel('Recall')
+    plt.rcParams.update({'font.size': 16})
+
+
+plot_pr_curve(precision_all[:-1], recall_all[:-1], 'Precision recall curve (all)')
